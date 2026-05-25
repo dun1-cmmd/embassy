@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Embassy Town | Kisii, Kenya - Radio Interactive Services Hub</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            color: #1e2a32;
+            line-height: 1.5;
+        }
+
+        /* header / hero */
+        .hero {
+            background: linear-gradient(135deg, #0b3b2f 0%, #1b5e3f 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .hero h1 i {
+            margin-right: 10px;
+            color: #ffd966;
+        }
+        .hero p {
+            font-size: 1rem;
+            margin-top: 0.6rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .location-badge {
+            background: rgba(255,255,240,0.2);
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            backdrop-filter: blur(4px);
+        }
+
+        /* stats and quick filters */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: white;
+            margin: 1.5rem 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 28px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .stat-card {
+            flex: 1;
+            text-align: center;
+            font-weight: 600;
+        }
+        .stat-card i {
+            font-size: 1.6rem;
+            color: #1b5e3f;
+            margin-right: 6px;
+        }
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0b3b2f;
+        }
+
+        /* radio group filter styling */
+        .radio-filter-section {
+            background: white;
+            border-radius: 28px;
+            margin: 0 1rem 1.5rem 1rem;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid #e2ede6;
+        }
+        .radio-group-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            color: #1b5e3f;
+        }
+        .radio-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            align-items: center;
+        }
+        .radio-buttons-container label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f3;
+            padding: 6px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+        .radio-buttons-container input[type="radio"] {
+            accent-color: #1b5e3f;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+            cursor: pointer;
+        }
+        .radio-buttons-container label:hover {
+            background: #e0efe7;
+            transform: translateY(-1px);
+        }
+        .radio-buttons-container input[type="radio"]:checked + span, 
+        .radio-buttons-container label:has(input:checked) {
+            background: #1b5e3f;
+            color: white;
+            border-color: #1b5e3f;
+        }
+        .radio-buttons-container label:has(input:checked) {
+            background: #1b5e3f;
+            color: white;
+        }
+        .reset-radio-btn {
+            background: none;
+            border: 1px solid #b9cfc3;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2c5a46;
+        }
+        .reset-radio-btn:hover {
+            background: #eef3f0;
+            border-color: #1b5e3f;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1rem 2rem 1rem;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin: 1rem 0 1rem 0;
+            border-left: 6px solid #2c7a4b;
+            padding-left: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-title i {
+            color: #2c7a4b;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border: 1px solid #e2ede6;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 22px rgba(0,0,0,0.08);
+            border-color: #bcddcc;
+            background: #fefff7;
+        }
+        .service-icon {
+            font-size: 2.4rem;
+            width: 55px;
+            text-align: center;
+            color: #2c7a4b;
+        }
+        .service-info {
+            flex: 1;
+        }
+        .service-name {
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+        .service-desc {
+            font-size: 0.8rem;
+            color: #4b6b5c;
+        }
+        .badge {
+            background: #e9f5ef;
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #155f3a;
+        }
+
+        /* selected service panel */
+        .selected-panel {
+            background: #ffffffdd;
+            backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin: 1rem 0 1.8rem 0;
+            border: 1px solid #cde3d9;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .active-service-title {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #144d33;
+        }
+        .contact-sim {
+            background: #1b5e3f;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .contact-sim:hover {
+            background: #0a3726;
+        }
+        .details-text {
+            margin-top: 1rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #cfe6dd;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #0b2a21;
+            color: #cdede2;
+            margin-top: 2rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 680px) {
+            .hero h1 { font-size: 1.7rem; }
+            .service-card { padding: 0.8rem; }
+            .service-icon { font-size: 1.8rem; width: 45px; }
+        }
+        button {
+            background: none;
+            border: none;
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #1e2a32;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            z-index: 999;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+            animation: fadeOut 3s forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        .highlight-card {
+            background-color: #e0f7ea !important;
+            border-left: 4px solid #1b5e3f !important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1><i class="fas fa-city"></i> Embassy Town</h1>
+    <p>Your trusted local service hub — Kisii, Kenya. Connecting you to verified professionals & essential services.</p>
+    <div class="location-badge"><i class="fas fa-map-marker-alt"></i> Kisii CBD • Open 24/7 community support</div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+    <div class="stat-card"><i class="fas fa-concierge-bell"></i> <span class="stat-number" id="totalServicesCount">0</span><br>Services</div>
+    <div class="stat-card"><i class="fas fa-briefcase"></i> <span class="stat-number" id="activeProCount">0</span><br>Expert Pros</div>
+    <div class="stat-card"><i class="fas fa-handshake"></i> <span class="stat-number" id="connectsCount">0</span><br>Quick Connects</div>
+</div>
+
+<!-- RADIO BUTTON FILTER SECTION - fully interactive, linked to service tags -->
+<div class="radio-filter-section">
+    <div class="radio-group-title"><i class="fas fa-dot-circle"></i> Filter by Service Category (Radio Buttons)</div>
+    <div class="radio-buttons-container" id="radioFilterGroup">
+        <!-- Dynamically populated radio buttons from servicesData -->
+    </div>
+    <div style="margin-top: 12px;">
+        <button id="resetRadioFilterBtn" class="reset-radio-btn"><i class="fas fa-undo-alt"></i> Show All Services</button>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Selected service info panel (dynamic) -->
+    <div class="selected-panel" id="selectedServicePanel">
+        <div class="panel-header">
+            <div class="active-service-title"><i class="fas fa-star-of-life"></i> No service selected</div>
+            <button class="contact-sim" id="requestQuoteBtn" disabled><i class="fas fa-phone-alt"></i> Request assistance</button>
+        </div>
+        <div class="details-text" id="serviceDetailsMsg">
+            Tap on any service card below OR select a radio button to filter & view local experts in Embassy Town, Kisii.
+        </div>
+    </div>
+
+    <div class="section-title"><i class="fas fa-hand-sparkles"></i> Essential & Community Services</div>
+    <div class="services-grid" id="servicesGrid"></div>
+</div>
+
+<footer>
+    <i class="fas fa-heart" style="color: #ffb347;"></i> Embassy Town – empowering Kisii community
+</footer>
+
+<script>
+    // ----- DATA MODEL: All services with professional groups & contacts -----
+    const servicesData = [
+        { id: "fuel", name: "Fuel Pumps", icon: "fas fa-gas-pump", description: "24/7 petrol & diesel stations near Kisii–Kilgoris road.", experts: ["Express Fuel Station", "TotalEnergies Kisii", "National Oil"] },
+        { id: "clinics", name: "Clinics", icon: "fas fa-hospital-user", description: "Quality healthcare, maternity & outpatient services.", experts: ["Embassy Town Med Centre", "Kisii Referral Clinics", "St. Mary's Pharmacy & Clinic"] },
+        { id: "resort", name: "Resorts & Lodges", icon: "fas fa-umbrella-beach", description: "Relaxing getaways and conference facilities.", experts: ["Samweli Resort", "Getembe Gardens", "Mwalimu Hotel"] },
+        { id: "schools", name: "Schools", icon: "fas fa-chalkboard-user", description: "Primary, secondary & vocational training.", experts: ["Embassy Academy", "Kisii School of Excellence", "Riana High School"] },
+        { id: "churches", name: "Churches", icon: "fas fa-church", description: "Places of worship & spiritual support.", experts: ["St. Peter's Cathedral", "AIC Embassy Town", "Pentecostal Church Kisii"] },
+        { id: "carwash", name: "Car Wash", icon: "fas fa-car", description: "Auto detailing, pressure wash & vacuum.", experts: ["Clean Wheels Carwash", "Kisii Splash & Shine", "EcoWash Auto"] },
+        { id: "poshomills", name: "Posho Mills", icon: "fas fa-industry", description: "Maize milling & cereal processing.", experts: ["Nyamira Millers", "Embassy Town Posho Mill", "Jogoo Millers"] },
+        { id: "shops", name: "Shops & General Stores", icon: "fas fa-store", description: "Household goods, groceries & essentials.", experts: ["Sunshine Store", "Jumbo Mart Embassy", "Kisii City Shop"] },
+        { id: "minimarkets", name: "Mini Supermarkets", icon: "fas fa-shopping-basket", description: "Fresh produce & daily deals.", experts: ["Green Valley Minimart", "QuickPick Supermarket", "Supa Fresh"] },
+        { id: "bankagents", name: "Bank Agents", icon: "fas fa-landmark", description: "M-Pesa, ATM, deposits & withdrawals.", experts: ["Equity Agent - CBD", "KCB Mtaani", "Cooperative Bank Agent"] },
+        { id: "pharmacy", name: "Pharmacy", icon: "fas fa-capsules", description: "Prescriptions & health advice.", experts: ["Embassy Town Chemist", "WellCare Pharmacy", "MediPlus Kisii"] },
+        { id: "cyber", name: "Cyber Café", icon: "fas fa-desktop", description: "Printing, scanning, internet services.", experts: ["NetBiz Cyber", "FastLink Café", "DigiZone Kisii"] },
+        { id: "bodaboda", name: "Boda Boda", icon: "fas fa-motorcycle", description: "Fast & reliable motorbike taxis.", experts: ["Embassy Riders Sacco", "Kisii Stage Boda", "Swift Transport"] },
+        { id: "construction", name: "Construction Fundis", icon: "fas fa-hard-hat", description: "Masonry, building & renovations.", experts: ["Fundi Juma Constructions", "Master Builders Kisii", "RockSolid Team"] },
+        { id: "drivers", name: "Experienced Drivers", icon: "fas fa-truck", description: "Licensed drivers for hire / logistics.", experts: ["James Otieno (Class B, C)", "Mary Achieng (Long distance)", "Embassy Driver Pool"] },
+        { id: "autoeng", name: "Automotive Engineers", icon: "fas fa-wrench", description: "Diagnostics, repairs & servicing.", experts: ["AutoCare Pro", "Kisii Garage Experts", "Mechenic Hub"] },
+        { id: "agriprac", name: "Agricultural Practitioners", icon: "fas fa-tractor", description: "Crop advisory, farm inputs & extension.", experts: ["GreenFarm Agri", "Kisii Crop Care", "Organic Solutions"] },
+        { id: "plumbers", name: "Plumbers", icon: "fas fa-water", description: "Leak repairs, installations & drainage.", experts: ["Peter M. (24/7 Plumber)", "FlowMaster Ltd", "Everflow Plumbing"] },
+        { id: "electricians", name: "Electricians", icon: "fas fa-bolt", description: "Wiring, repairs & electrical safety.", experts: ["SafePower Electrics", "Kisii Wiremen Union", "John Otundo"] },
+        { id: "carpenters", name: "Carpenters", icon: "fas fa-chair", description: "Furniture making & joinery.", experts: ["Creative Woodwork", "Embassy Joinery", "TimberCraft"] },
+        { id: "welders", name: "Welders", icon: "fas fa-fire", description: "Metal fabrication, gates & repairs.", experts: ["SteelArt Welders", "Kisii Iron Masters", "Precision Welding"] },
+        { id: "vets", name: "Veterinaries", icon: "fas fa-paw", description: "Livestock & pet health services.", experts: ["Kisii Vet Clinic", "Animal Care Centre", "Dr. Mbugua Vet"] }
+    ];
+
+    // Interaction state
+    let selectedServiceId = null;
+    let selectedServiceObj = null;
+    let connectCounter = 0;
+    let activeRadioFilter = null;      // stores currently selected radio service id
+
+    // Helper functions
+    function updateStatsUI() {
+        $("#totalServicesCount").text(servicesData.length);
+        $("#activeProCount").text(servicesData.reduce((sum, s) => sum + s.experts.length, 0));
+        $("#connectsCount").text(connectCounter);
+    }
+
+    function showToast(message, duration = 2800) {
+        $(".toast-msg").remove();
+        let toast = $(`<div class="toast-msg"><i class="fas fa-info-circle"></i> ${message}</div>`);
+        $("body").append(toast);
+        setTimeout(() => toast.remove(), duration);
+    }
+
+    // Update selected panel (service object)
+    function updateSelectedPanel(service) {
+        if (!service) {
+            selectedServiceId = null;
+            selectedServiceObj = null;
+            $("#selectedServicePanel .active-service-title").html('<i class="fas fa-star-of-life"></i> No service selected');
+            $("#serviceDetailsMsg").html("Tap on any service card below OR select a radio button to filter & view local experts in Embassy Town, Kisii.");
+            $("#requestQuoteBtn").prop("disabled", true);
+            return;
+        }
+        selectedServiceId = service.id;
+        selectedServiceObj = service;
+        let expertsList = service.experts.map(exp => `<li><i class="fas fa-user-check"></i> ${exp}</li>`).join('');
+        $("#selectedServicePanel .active-service-title").html(`<i class="fas ${service.icon}"></i> ${service.name} in Kisii`);
+        $("#serviceDetailsMsg").html(`
+            <strong><i class="fas fa-map-pin"></i> Local professionals & providers:</strong><br>
+            <ul style="margin-top:8px; margin-left:20px;">${expertsList}</ul>
+            <div class="badge" style="margin-top:8px; display:inline-block;"><i class="fas fa-clock"></i> Response within 15min | Verified by Embassy Town</div>
+        `);
+        $("#requestQuoteBtn").prop("disabled", false);
+    }
+
+    // Request assistance
+    function requestServiceAssistance() {
+        if (!selectedServiceObj) {
+            showToast("⚠️ Please select a service from the grid or radio button first.");
+            return;
+        }
+        connectCounter++;
+        updateStatsUI();
+        let randomExpert = selectedServiceObj.experts[Math.floor(Math.random() * selectedServiceObj.experts.length)];
+        showToast(`📞 Connecting you to ${randomExpert} (${selectedServiceObj.name}) - We'll connect you shortly!`, 3500);
+        let $btn = $("#requestQuoteBtn");
+        $btn.text("✓ Request sent!");
+        setTimeout(() => {
+            $btn.html('<i class="fas fa-phone-alt"></i> Request assistance');
+        }, 1800);
+        console.log(`[Embassy Town] Assistance requested for ${selectedServiceObj.name} via ${randomExpert}. Total connects: ${connectCounter}`);
+    }
+
+    // FILTER SERVICES BY RADIO (and clear other highlights)
+    function filterServicesByRadio(serviceId) {
+        if (!serviceId) {
+            // show all cards
+            $(".service-card").show();
+            activeRadioFilter = null;
+            // uncheck all radio buttons
+            $('input[name="serviceRadioFilter"]').prop('checked', false);
+            return;
+        }
+        activeRadioFilter = serviceId;
+        $(".service-card").each(function() {
+            let cardId = $(this).data("id");
+            if (cardId === serviceId) {
+                $(this).show();
+                // also trigger click simulation to update panel? we call update directly but better sync panel
+                let matchedService = servicesData.find(s => s.id === serviceId);
+                if (matchedService) {
+                    updateSelectedPanel(matchedService);
+                    // Scroll/highlight effect
+                    $(this).addClass("highlight-card");
+                    setTimeout(() => $(this).removeClass("highlight-card"), 600);
+                }
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    // Render radio buttons dynamically and link them to their respective tags
+    function renderRadioFilters() {
+        const $radioContainer = $("#radioFilterGroup");
+        $radioContainer.empty();
+        servicesData.forEach(service => {
+            // create label with radio input
+            const radioId = `radio_${service.id}`;
+            const label = $(`
+                <label for="${radioId}">
+                    <input type="radio" name="serviceRadioFilter" id="${radioId}" value="${service.id}">
+                    <span><i class="${service.icon}" style="margin-right: 4px;"></i> ${service.name}</span>
+                </label>
+            `);
+            // attach change event for interactivity: whenever radio is selected => filter and update panel
+            const $radioInput = label.find('input');
+            $radioInput.on('change', function() {
+                if ($(this).is(':checked')) {
+                    const selectedId = $(this).val();
+                    filterServicesByRadio(selectedId);
+                    showToast(`🔘 Filtered: ${service.name} — showing only related experts & services.`, 2000);
+                }
+            });
+            $radioContainer.append(label);
+        });
+        // reset radio button functionality
+        $("#resetRadioFilterBtn").off('click').on('click', function() {
+            // clear radio selection, show all services
+            $('input[name="serviceRadioFilter"]').prop('checked', false);
+            filterServicesByRadio(null);
+            updateSelectedPanel(null);
+            showToast("✅ All services visible. Radio filter cleared.", 1800);
+        });
+    }
+
+    // Render all service cards (grid)
+    function renderServices() {
+        const $grid = $("#servicesGrid");
+        $grid.empty();
+        servicesData.forEach(service => {
+            const card = $(`
+                <div class="service-card" data-id="${service.id}" data-name="${service.name}">
+                    <div class="service-icon"><i class="${service.icon}"></i></div>
+                    <div class="service-info">
+                        <div class="service-name">${service.name}</div>
+                        <div class="service-desc">${service.description.substring(0, 60)}</div>
+                        <span class="badge"><i class="fas fa-users"></i> ${service.experts.length} experts</span>
+                    </div>
+                </div>
+            `);
+            card.on("click", function(e) {
+                const servId = $(this).data("id");
+                const found = servicesData.find(s => s.id === servId);
+                if (found) {
+                    // When clicking card, also update radio button to match the selected service (link radio with card)
+                    $(`input[name="serviceRadioFilter"][value="${servId}"]`).prop('checked', true).trigger('change');
+                    // update panel & also ensure filter shows only that? we want consistency: clicking card shows that service but does not auto-hide others (better UX - show only that card as selected but radio will sync and apply filter)
+                    // Actually, to keep consistent with radio behavior: we apply filter to only this service (just like radio)
+                    filterServicesByRadio(servId);
+                    showToast(`🔍 Showing "${found.name}" services only — tap reset to view all.`, 1800);
+                } else {
+                    showToast("Service not found.");
+                }
+            });
+            $grid.append(card);
+        });
+    }
+
+    // function to reset everything and clear filters
+    function resetAllFilters() {
+        $('input[name="serviceRadioFilter"]').prop('checked', false);
+        filterServicesByRadio(null);
+        updateSelectedPanel(null);
+        showToast("🏠 Displaying all services in Embassy Town, Kisii.", 2000);
+    }
+
+    // init app: render radios, services, attach handlers
+    function initApp() {
+        renderRadioFilters();      // creates radio buttons and links them with tags
+        renderServices();          // renders cards
+        updateStatsUI();
+        updateSelectedPanel(null);
+        
+        // Attach request assistance button
+        $("#requestQuoteBtn").on("click", requestServiceAssistance);
+        
+        // Additional global method to demonstrate community tip (function & method)
+        window.displayCommunityTip = function() {
+            const tips = ["🚀 Support local boda boda SACCOs for cheaper rides", "🌱 Agricultural practitioners offer free soil testing on Thursdays", "🛠️ Construction fundis available at Embassy Town stage daily 7am", "⚡ Electricians: 24hr emergency response available"];
+            let randomTip = tips[Math.floor(Math.random() * tips.length)];
+            showToast(`💡 Tip: ${randomTip}`, 4000);
+        };
+        
+        // Floating tip button
+        if ($("#tipFloater").length === 0) {
+            let tipBtn = $(`<button id="tipFloater" style="position:fixed; bottom:80px; right:20px; background:#1b5e3f; color:white; border-radius:50px; padding:10px 15px; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.2); z-index:1000; border:none;"><i class="fas fa-lightbulb"></i> Community Tip</button>`);
+            $("body").append(tipBtn);
+            tipBtn.on("click", () => window.displayCommunityTip());
+        }
+        
+        setTimeout(() => {
+            showToast("🎯 Radio buttons fully linked! Select any category to filter & connect to pros.", 3000);
+        }, 500);
+    }
+    
+    // Document ready using jQuery
+    $(document).ready(function() {
+        initApp();
+        // ensure dynamic stats update
+        setInterval(() => updateStatsUI(), 1000);
+    });
+</script>
+</body>
+</html>
